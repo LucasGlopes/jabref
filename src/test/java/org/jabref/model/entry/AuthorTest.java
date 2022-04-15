@@ -5,7 +5,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AuthorTest {
 
@@ -76,4 +78,21 @@ class AuthorTest {
         assertEquals(input, Author.addDotIfAbbreviation(input));
     }
 
+    @Test
+    void abbreviateChosenNames(){
+        assertEquals("George R. Richard", Author.abbreviateName("George Raymond Richard", new int[]{2}));
+        assertEquals("George R. R.", Author.abbreviateName("George Raymond Richard", new int[]{2,3}));
+    }
+
+    @Test
+    void whenNamePositionIsBiggerThanNamesQuantity(){
+        assertThrows(
+                RuntimeException.class,
+                () -> Author.abbreviateName("George Raymond Richard", new int[]{2,5})
+        );
+        assertThrows(
+                RuntimeException.class,
+                () -> Author.abbreviateName("George Raymond Richard", new int[]{-1,3})
+        );
+    }
 }

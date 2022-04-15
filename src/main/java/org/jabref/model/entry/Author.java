@@ -372,4 +372,41 @@ public class Author {
         }
         return latexFreeAuthor;
     }
+
+    private static boolean checkIfNameIsInArray(int[] abbreviatedNamesPositions, int currentPosition){
+        for (int namePosition : abbreviatedNamesPositions) {
+            if (namePosition == currentPosition) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private static boolean checkPosition(int[] abbreviatedNamesPositions, String[] names){
+        for(int namePosition : abbreviatedNamesPositions){
+            if(namePosition < 1 || namePosition > names.length){
+                return true;
+            }
+        }
+        return false;
+    }
+    public static String abbreviateName(String name, int[] abbreviatedNamesPositions){
+        boolean isNameInArray;
+        StringBuilder sb = new StringBuilder();
+        String[] splitName = name.split("\\s+");
+
+        if(checkPosition(abbreviatedNamesPositions, splitName)){
+            throw new RuntimeException("Name's position should be between 1 and " + splitName.length);
+        }
+
+        for(int j = 0; j < splitName.length; j++){
+            isNameInArray = checkIfNameIsInArray(abbreviatedNamesPositions, j + 1);
+            if(isNameInArray){
+                sb.append(splitName[j].charAt(0));
+            }else{
+                sb.append(splitName[j]);
+            }
+            sb.append(" ");
+        }
+        return addDotIfAbbreviation(sb.toString());
+    }
 }
